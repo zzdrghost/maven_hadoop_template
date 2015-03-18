@@ -1,5 +1,3 @@
-package org.conan.myhadoop.mr.kpi;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -36,7 +34,10 @@ public class KPI {
             kpi.setHttp_referer(arr[10]);
             
             if (arr.length > 12) {
-                kpi.setHttp_user_agent(arr[11] + " " + arr[12]);
+            	kpi.setHttp_user_agent(arr[11]);
+            	for(int i=12;i<arr.length;i++){
+                kpi.setHttp_user_agent(kpi.getHttp_user_agent()+ " " + arr[i]);
+            	}
             } else {
                 kpi.setHttp_user_agent(arr[11]);
             }
@@ -222,19 +223,9 @@ public class KPI {
 
     public static void main(String args[]) {
         String line = "222.68.172.190 - - [18/Sep/2013:06:49:57 +0000] \"GET /images/my.jpg HTTP/1.1\" 200 19939 \"http://www.angularjs.cn/A00n\" \"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36\"";
-        System.out.println(line);
-        KPI kpi = new KPI();
-        String[] arr = line.split(" ");
-
-        kpi.setRemote_addr(arr[0]);
-        kpi.setRemote_user(arr[1]);
-        kpi.setTime_local(arr[3].substring(1));
-        kpi.setRequest(arr[6]);
-        kpi.setStatus(arr[8]);
-        kpi.setBody_bytes_sent(arr[9]);
-        kpi.setHttp_referer(arr[10]);
-        kpi.setHttp_user_agent(arr[11] + " " + arr[12]);
-        System.out.println(kpi);
+        
+        KPI kpi=parser(line);
+        System.out.println(kpi+"\n");
 
         try {
             SimpleDateFormat df = new SimpleDateFormat("yyyy.MM.dd:HH:mm:ss", Locale.US);
@@ -245,5 +236,6 @@ public class KPI {
             e.printStackTrace();
         }
     }
+    
 
 }
